@@ -24,7 +24,7 @@ with dag:
     )
 
     wait_tasks = [
-        BashOperator(task_id='wait_{i}', bash_command='sleep {i}') for i in [1,5,10]
+        BashOperator(task_id=f'wait_{i}', bash_command=f'sleep {i}') for i in [1,5,10]
     ]
 
     the_end = DummyOperator(
