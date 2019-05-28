@@ -13,5 +13,5 @@ dag = DAG(
 
 with dag:
     BashOperator(
-        task_id="print_exec_date", bash_command="echo {{ execution_date }}",
+        task_id="print_exec_date_tweak", bash_command="echo {{ execution_date }}",
     )
