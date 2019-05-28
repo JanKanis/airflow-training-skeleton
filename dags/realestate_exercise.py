@@ -1,12 +1,12 @@
 
 
 import airflow.utils.dates
+from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
 from airflow.utils.trigger_rule import TriggerRule
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import *
 
-from .operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
 
 
 args = dict(
