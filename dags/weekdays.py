@@ -62,5 +62,5 @@ with dag:
         bash_command='echo done',
     )
 
-    weekday >> email_tasks.values() >> final
+    weekday >> branch >> email_tasks.values() >> final
 
