@@ -14,7 +14,7 @@ args = dict(
 
 
 dag = airflow.DAG(
-    dag_id = 'exercise2-try',
+    dag_id = 'exercise2b',
     default_args = args,
 )
 
@@ -23,24 +23,13 @@ with dag:
         task_id="print_execution_date", bash_command="echo {{ execution_date }}",
     )
 
-    wait_5 = BashOperator(
-        task_id='wait_5',
-        bash_command='sleep 5',
-    )
-
-    wait_1 = BashOperator(
-        task_id='wait_1',
-        bash_command='sleep 1',
-    )
-
-    wait_10 = BashOperator(
-        task_id='wait_10',
-        bash_command='sleep 10',
-    )
+    wait_tasks = [
+        BashOperator(task_id='wait_{i}', bash_command='sleep {i}') for i in [1,5,10]
+    ]
 
     the_end = DummyOperator(
         task_id='the_end'
     )
 
-    print_execution_date >> [wait_1, wait_5, wait_10] >> the_end
+    print_execution_date >> wait_tasks >> the_end
 
