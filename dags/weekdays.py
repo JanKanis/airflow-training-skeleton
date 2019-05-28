@@ -52,9 +52,9 @@ with dag:
     )
 
     email_tasks = dict(
-        Bob = DummyOperator('email_bob'),
-        Joe = DummyOperator('email_joe'),
-        Alice = DummyOperator('email_alice'),
+        Bob = DummyOperator(task_id='email_bob'),
+        Joe = DummyOperator(task_id='email_joe'),
+        Alice = DummyOperator(task_id='email_alice'),
     )
 
     final = BashOperator(
