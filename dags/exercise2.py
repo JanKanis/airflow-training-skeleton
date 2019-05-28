@@ -8,7 +8,8 @@ from airflow.operators.python_operator import PythonOperator
 
 args = dict(
     owner = "Jan",
-    start_date = airflow.utils.dates.days_ago(14)
+    start_date = airflow.utils.dates.days_ago(14),
+    schedule_interval=None,
 )
 
 
@@ -43,4 +44,3 @@ with dag:
 
     print_execution_date >> [wait_1, wait_5, wait_10] >> the_end
 
-    
