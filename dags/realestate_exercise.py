@@ -11,13 +11,14 @@ from .airflow_training.operators.postgres_to_gcs import PostgresToGoogleCloudSto
 
 args = dict(
     owner = "Jan",
-    start_date = airflow.utils.dates.days_ago(14),
+    start_date = airflow.utils.dates.days_ago(3),
     #schedule_interval=None,
 )
 
 dag = airflow.DAG(
     dag_id = 'realestate',
     default_args = args,
+    schedule_interval="0 0 * * *",
 )
 
 
@@ -30,4 +31,3 @@ with dag:
         postgres_conn_id='realestate postgres',
     )
 
-    
