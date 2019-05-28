@@ -14,7 +14,7 @@ args = dict(
 
 
 dag = airflow.DAG(
-    dag_id = 'exercise2',
+    dag_id = 'exercise2-try',
     default_args = args,
 )
 
