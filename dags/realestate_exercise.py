@@ -24,7 +24,7 @@ dag = airflow.DAG(
 
 with dag:
     pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
-        task_id='import sql data',
+        task_id='import_sql_data',
         sql='''SELECT * FROM land_registry_price_paid_uk WHERE transfer_date = '{{ ds }}' ''',
         bucket='europe-west1-training-airfl-2be0c9a3-bucket',
         filename='realestate_data/{{ ds }}/properties_{}.json',
