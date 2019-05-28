@@ -22,9 +22,8 @@ dag = airflow.DAG(
 )
 
 
-def now_weekday():
-    my_date = date.today()
-    return calendar.day_name[my_date.weekday()][:3]
+def now_weekday(datetime):
+    return calendar.day_name[datetime.weekday()][:3]
 
 weekday_person_to_mail = dict(
     Mon='Bob',
@@ -43,12 +42,14 @@ with dag:
 
     weekday = PythonOperator(
         task_id='print_weekday',
-        python_callable=lambda: print(now_weekday())
+        python_callable=lambda execution_date, **kwargs: print(now_weekday(execution_date)),
+        provide_context=True,
     )
 
     branch = BranchPythonOperator(
         task_id='branch',
-        python_callable=lambda: email_tasks[weekday_person_to_mail[now_weekday()]].task_id
+        python_callable=lambda execution_date, **kwargs: email_tasks[weekday_person_to_mail[now_weekday(execution_date)]].task_id,
+        provide_context=True,
     )
 
     email_tasks = dict(
