@@ -1,6 +1,7 @@
 
 
 import airflow.utils.dates
+from airflow.utils.trigger_rule import TriggerRule
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import *
@@ -61,6 +62,7 @@ with dag:
     final = BashOperator(
         task_id='final_task',
         bash_command='echo done',
+        trigger_rule=TriggerRule.ONE_SUCCESS
     )
 
     weekday >> branch >> email_tasks.values() >> final
