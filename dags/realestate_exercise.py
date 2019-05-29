@@ -16,6 +16,11 @@ args = dict(
     #schedule_interval=None,
 )
 
+
+def response_check(response):
+    return len(response.text) > 0
+
+
 dag = airflow.DAG(
     dag_id = 'realestate',
     default_args = args,
@@ -39,6 +44,7 @@ with dag:
         bucket='europe-west1-training-airfl-2be0c9a3-bucket',
         filename='realestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json',
         http_conn_id='cloud_function_valutas',
+        response_check=response_check,
     )
 
 

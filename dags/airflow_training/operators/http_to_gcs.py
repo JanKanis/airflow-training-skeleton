@@ -1,5 +1,6 @@
 from tempfile import NamedTemporaryFile
 
+from airflow import AirflowException
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from airflow.hooks.http_hook import HttpHook
 
@@ -19,7 +20,7 @@ class HttpToGcsOperator(BaseOperator):
                  method='GET',
                  data=None,
                  headers=None,
-                 response_check=True,
+                 response_check=None,
                  extra_options=None,
                  http_conn_id='http_default',
                  log_response=False,
@@ -56,6 +57,10 @@ class HttpToGcsOperator(BaseOperator):
                             self.extra_options)
         if self.log_response:
             self.log.info(response.text)
+
+        if self.response_check:
+            if not self.response_check(response):
+                raise AirflowException("Response check returned False.")
 
         tmp_file_handle = NamedTemporaryFile(mode='w+t', delete=True)
         tmp_file_handle.write(response.text)
