@@ -98,6 +98,7 @@ with dag:
         destination_project_dataset_table=f"{project_id}:realestate.land_registry_price${{{{ ds_nodash }}}}",
         source_format="PARQUET",
         write_disposition="WRITE_TRUNCATE",
+        autodetect=True,
     )
 
     dataproc_delete_cluster >> gcs_to_bq
