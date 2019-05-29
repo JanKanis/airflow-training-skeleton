@@ -64,6 +64,7 @@ class HttpToGcsOperator(BaseOperator):
 
         tmp_file_handle = NamedTemporaryFile(mode='w+t', delete=True)
         tmp_file_handle.write(response.text)
+        tmp_file_handle.seek(0)
 
 
         self.log.info("Uploading to Google Cloud")
