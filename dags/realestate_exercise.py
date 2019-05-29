@@ -35,7 +35,7 @@ with dag:
     http_to_gcs = HttpToGcsOperator(
         task_id = 'load_values',
         endpoint='airflow-training-transform-valutas',
-        data= { 'date': '{{ ds }}', 'from': 'GBP', 'to': 'EUR'}{ 'date': '{{ ds }}', 'from': 'GBP', 'to': 'EUR'},
+        data= { 'date': '{{ ds }}', 'from': 'GBP', 'to': 'EUR'},
         bucket='europe-west1-training-airfl-2be0c9a3-bucket',
         filename='realestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json',
     )
