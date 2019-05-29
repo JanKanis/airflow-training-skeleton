@@ -55,6 +55,7 @@ with dag:
     cluster_name = "analyse-pricing-{{ ds }}"
 
     dataproc_create_cluster = DataprocClusterCreateOperator(
+        task_id='create cluster',
         cluster_name=cluster_name,
         project_id=project_id,
         num_workers=2,
@@ -62,6 +63,7 @@ with dag:
     )
 
     compute_aggregates = DataProcPySparkOperator(
+        task_id='build statistics',
         main="other/build_statistics.py",
         cluster_name=cluster_name,
         arguments=[
@@ -72,6 +74,7 @@ with dag:
     )
 
     dataproc_delete_cluster = DataprocClusterDeleteOperator(
+        task_id='delete cluster',
         cluster_name=cluster_name,
         project_id=project_id,
     )
