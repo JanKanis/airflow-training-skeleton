@@ -38,7 +38,7 @@ with dag:
         data= { 'date': '{{ ds }}', 'from': 'GBP', 'to': 'EUR'},
         bucket='europe-west1-training-airfl-2be0c9a3-bucket',
         filename='realestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json',
-        google_cloud_storage_conn_id='cloud_function_valutas',
+        http_conn_id='cloud_function_valutas',
     )
 
 
