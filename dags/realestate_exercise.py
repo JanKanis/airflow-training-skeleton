@@ -45,6 +45,7 @@ with dag:
         filename='realestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json',
         http_conn_id='cloud_function_valutas',
         response_check=response_check,
+        log_response=True,
     )
 
 
