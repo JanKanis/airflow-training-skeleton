@@ -2,7 +2,7 @@
 
 import airflow.utils.dates
 from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
-from dags.airflow_training.operators.http_to_gcs import HttpToGcsOperator
+from .airflow_training.operators.http_to_gcs import HttpToGcsOperator
 from airflow.utils.trigger_rule import TriggerRule
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
