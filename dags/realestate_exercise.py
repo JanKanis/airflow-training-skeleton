@@ -64,7 +64,7 @@ with dag:
 
     compute_aggregates = DataProcPySparkOperator(
         task_id='build_statistics',
-        main="../other/build_statistics.py",
+        main="gs://europe-west1-training-airfl-2be0c9a3-bucket/build_statistics.py",
         cluster_name=cluster_name,
         arguments=[
             "land_registry_price_datafile_location",
