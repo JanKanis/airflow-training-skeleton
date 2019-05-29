@@ -67,9 +67,9 @@ with dag:
         main="gs://europe-west1-training-airfl-2be0c9a3-bucket/build_statistics.py",
         cluster_name=cluster_name,
         arguments=[
-            "land_registry_price_datafile_location",
-            "currency_datafile_location",
-            "output_datafile_location",
+            "gs://europe-west1-training-airfl-2be0c9a3-bucket/realestate_data/{{ ds }}/properties_{}.json",
+            "gs://europe-west1-training-airfl-2be0c9a3-bucket/ealestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json",
+            "gs://europe-west1-training-airfl-2be0c9a3-bucket/realestate_dataproc_output/{{ ds }}/output.parquet",
         ],
     )
 
