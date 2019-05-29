@@ -1,6 +1,7 @@
 
 
 import airflow.utils.dates
+from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
 from airflow_training.operators.http_to_gcs import HttpToGcsOperator
 from airflow.utils.trigger_rule import TriggerRule
@@ -23,7 +24,8 @@ realestate_datafiles = 'realestate_data/{{ ds }}/properties_{}.json'
 realestate_datafile_full = f'gs://{bucket}/{realestate_datafiles.replace("{}","0")}'
 pound_rate_file = 'realestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json'
 pound_rate_file_full = f'gs://{bucket}/{pound_rate_file}'
-dataproc_output = f'gs://{bucket}'+'/realestate_dataproc_output/{{ ds }}/'
+dataproc_output = 'realestate_dataproc_output/{{ ds }}'
+dataproc_output_full = f'gs://{bucket}/{dataproc_output}'
 
 
 def response_check(response):
@@ -75,7 +77,7 @@ with dag:
         arguments=[
             realestate_datafile_full,
             pound_rate_file_full,
-            dataproc_output,
+            dataproc_output_full,
         ],
     )
 
@@ -86,6 +88,20 @@ with dag:
     )
 
     [pgsl_to_gcs, http_to_gcs] >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
+
+
+
+    gcs_to_bq = GoogleCloudStorageToBigQueryOperator(
+        task_id="gcs_to_bq",
+        bucket=bucket,
+        source_objects=[f'{dataproc_output}/*'],
+        destination_project_dataset_table=f"{project_id}:realestate.land_registry_price${{{{ ds_nodash }}}}",
+        source_format="PARQUET",
+        write_disposition="WRITE_TRUNCATE",
+    )
+
+    dataproc_delete_cluster >> gcs_to_bq
+
 
 
 
