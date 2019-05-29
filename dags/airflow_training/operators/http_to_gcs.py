@@ -56,7 +56,7 @@ class HttpToGcsOperator(BaseOperator):
                             self.headers,
                             self.extra_options)
         if self.log_response:
-            self.log.info(f"HTTP {response.status_code}: {response.text}")
+            self.log.info(f"HTTP {response.status_code} from {response.url}: {response.text}")
 
         if self.response_check:
             if not self.response_check(response):
