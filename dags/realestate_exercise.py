@@ -18,6 +18,12 @@ args = dict(
 )
 
 project_id = 'airflowbolcom-may2829-1e4d09f0'
+bucket = 'europe-west1-training-airfl-2be0c9a3-bucket'
+realestate_datafiles = 'realestate_data/{{ ds }}/properties_{}.json'
+realestate_datafile_full = f'gs://{bucket}/{realestate_datafiles.replace("{}","0")}'
+pound_rate_file = 'realestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json'
+pound_rate_file_full = f'gs://{bucket}/{pound_rate_file}'
+dataproc_output = f'gs://{bucket}/realestate_dataproc_output/{{ ds }}/output.parquet'
 
 
 def response_check(response):
@@ -35,8 +41,8 @@ with dag:
     pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
         task_id='import_sql_data',
         sql='''SELECT * FROM land_registry_price_paid_uk WHERE transfer_date = '{{ ds }}' ''',
-        bucket='europe-west1-training-airfl-2be0c9a3-bucket',
-        filename='realestate_data/{{ ds }}/properties_{}.json',
+        bucket=bucket,
+        filename=realestate_datafiles,
         postgres_conn_id='realestate postgres',
     )
 
@@ -44,8 +50,8 @@ with dag:
         task_id = 'load_values',
         endpoint='airflow-training-transform-valutas',
         data= { 'date': '{{ ds }}', 'from': 'GBP', 'to': 'EUR'},
-        bucket='europe-west1-training-airfl-2be0c9a3-bucket',
-        filename='realestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json',
+        bucket=bucket,
+        filename=pound_rate_file,
         http_conn_id='cloud_function_valutas',
         response_check=response_check,
         log_response=True,
@@ -67,9 +73,9 @@ with dag:
         main="gs://europe-west1-training-airfl-2be0c9a3-bucket/build_statistics.py",
         cluster_name=cluster_name,
         arguments=[
-            "gs://europe-west1-training-airfl-2be0c9a3-bucket/realestate_data/{{ ds }}/properties_0.json",
-            "gs://europe-west1-training-airfl-2be0c9a3-bucket/ealestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json",
-            "gs://europe-west1-training-airfl-2be0c9a3-bucket/realestate_dataproc_output/{{ ds }}/output.parquet",
+            realestate_datafile_full,
+            pound_rate_file_full,
+            dataproc_output,
         ],
     )
 
