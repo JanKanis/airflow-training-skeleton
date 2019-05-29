@@ -18,12 +18,12 @@ args = dict(
 )
 
 project_id = 'airflowbolcom-may2829-1e4d09f0'
-bucket = 'europe-west1-training-airfl-2be0c9a3-bucket'
+bucket = 'gs://europe-west1-training-airfl-2be0c9a3-bucket'
 realestate_datafiles = 'realestate_data/{{ ds }}/properties_{}.json'
-realestate_datafile_full = f'gs://{bucket}/{realestate_datafiles.replace("{}","0")}'
+realestate_datafile_full = f'{bucket}/{realestate_datafiles.replace("{}","0")}'
 pound_rate_file = 'realestate_pound_rates/{{ ds }}/airflow-training-transform-valutas.json'
-pound_rate_file_full = f'gs://{bucket}/{pound_rate_file}'
-dataproc_output = f'gs://{bucket}/realestate_dataproc_output/{{ ds }}/output.parquet'
+pound_rate_file_full = f'{bucket}/{pound_rate_file}'
+dataproc_output = bucket+'/realestate_dataproc_output/{{ ds }}/'
 
 
 def response_check(response):
